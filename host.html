@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Client product selector (host simulator)</title>
+  <link rel="stylesheet" href="./host.css" />
+</head>
+<body>
+  <header><h1>Client product selector (host simulator)</h1><span>User: sales.engineer@client.example</span></header>
+  <main>
+    <iframe id="twin" src="/" title="3D twin"></iframe>
+    <aside>
+      <b>Host controls</b><br /><br />
+      <button id="sel">Select M-301</button>
+      <button id="kw">Set motor 90 kW</button>
+      <button id="dark">Dark theme</button>
+      <button id="light">Light theme</button>
+      <p><b>Message log</b></p>
+      <pre id="log">waiting for twin/ready ...</pre>
+    </aside>
+  </main>
+  <script type="module">
+    const frame = document.getElementById('twin');
+    const log = document.getElementById('log');
+    const say = (t) => { log.textContent = new Date().toLocaleTimeString() + '  ' + t + '\n' + log.textContent; };
+    const post = (type, payload) => { frame.contentWindow.postMessage({ source: 'host', v: 1, type, payload }, location.origin); say('host -> twin  ' + type); };
+
+    window.addEventListener('message', (e) => {
+      if (e.origin !== location.origin || e.data?.source !== 'process-twin') return; // trust only the twin
+      say('twin -> host  ' + e.data.type + ' ' + JSON.stringify(e.data.payload));
+      if (e.data.type === 'twin/ready') post('host/auth', { token: 'demo-token' }); // auth hand-off (real: short-lived SSO token)
+    });
+    document.getElementById('sel').onclick = () => post('host/selectAsset', { id: 'M-301' });
+    document.getElementById('kw').onclick = () => post('host/project', { kw: 90 });
+    document.getElementById('dark').onclick = () => post('host/theme', 'dark');
+    document.getElementById('light').onclick = () => post('host/theme', 'light');
+  </script>
+</body>
+</html>

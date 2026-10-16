@@ -77,11 +77,11 @@ function Flow({ start, end }: { start: number; end: number }) {
 }
 
 // spinning selection ring under the active machine
-function Ring({ positions }: { positions: Record<string, [number, number, number]> }) {
+function Ring({ positions }: { positions: { [K in 'T-101' | 'P-201' | 'H-401' | 'M-301']: [number, number, number] } & { pipeStart: number; pipeEnd: number } }) {
   const sel  = useAppSelector((s) => s.twin.selected);
   const ring = useRef<Mesh>(null!);
   useFrame((_, dt) => { if (ring.current) ring.current.rotation.z += dt; });
-  const pos = sel ? positions[sel] : null;
+  const pos = sel && sel in positions && Array.isArray(positions[sel as keyof typeof positions]) ? positions[sel as 'T-101' | 'P-201' | 'H-401' | 'M-301'] : null;
   if (!pos) return null;
   return (
     <mesh ref={ring} position={[pos[0], 0.03, pos[2]]} rotation={[-Math.PI / 2, 0, 0]}>

@@ -1,7 +1,7 @@
 import { useMemo, useState, type FormEvent } from 'react';
 import {
   ASSETS, buildMotorBom, buildTankBom, buildPumpBom, buildHxBom, buildBom,
-  bomTotal, statusOf, type Starter,
+  bomTotal, statusOf, type Starter, type BomLine,
 } from '../lib/domain';
 import { store, useAppDispatch, useAppSelector, setMotor, setTank, setPump, setHx } from '../store';
 import { selectAsset } from '../lib/bridge';
@@ -469,7 +469,7 @@ export function BomPanel() {
 
   // calculate interconnect cables based on machine positions and enabled sections
   const cableBom = useMemo(() => {
-    const cables: typeof motorBom = [];
+    const cables: BomLine[] = [];
     const enabled = Array.from(enabledSections);
     
     // only add cables if we have at least 2 machines

@@ -9,7 +9,7 @@ const Scene = lazy(() => import('./components/Scene'));
 
 const TABS: [Tab, string][] = [
   ['size', 'Sizing'],
-  ['bom', 'BOM'],
+  ['bom', 'Bill'],
   ['ai', 'Assistant'],
   ['help', 'Help'],
 ];
@@ -54,7 +54,11 @@ export default function App() {
   const project = useAppSelector((s) => s.project);
 
   useEffect(() => initBridge(), []);
-  useEffect(() => (token ? connectFeed(token) : undefined), [token]);
+  // only connect via token dispatch when embedded in a host iframe
+  // standalone mode connects immediately inside initBridge()
+  useEffect(() => {
+    if (token && window.parent !== window) return connectFeed(token);
+  }, [token]);
   useEffect(() => { document.documentElement.dataset.theme = theme; }, [theme]);
 
   const bom   = useMemo(() => buildBom(project), [project]);
@@ -169,7 +173,7 @@ export default function App() {
         </div>
 
         {/* ── Sidebar ──────────────────────────────────────────────── */}
-        <aside className="w-80 flex flex-col bg-panel border-l border-line shrink-0">
+        <aside className="w-[440px] flex flex-col bg-panel border-l border-line shrink-0">
 
           {/* Live readings */}
           <div className="px-4 pt-4 pb-3 border-b border-line">

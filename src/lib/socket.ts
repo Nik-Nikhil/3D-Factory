@@ -1,6 +1,8 @@
 import { store, setData, setConn } from '../store';
 
-const WS_URL = `ws://${location.host.replace(/:\d+$/, '')}:3001`;
+const WS_URL =
+  import.meta.env.VITE_WS_URL ||
+  `ws://${location.host.replace(/:\d+$/, '')}:3001`;
 const RECONNECT_DELAY_MS = 3000;
 const MAX_RECONNECT_DELAY_MS = 30_000;
 

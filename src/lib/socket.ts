@@ -18,15 +18,25 @@ export function connectFeed(token: string): () => void {
   let stopped = false;
   let delay = RECONNECT_DELAY_MS;
   let retryTimer: ReturnType<typeof setTimeout> | null = null;
+  let failCount = 0;
+  const MAX_FAILS = 3; // After 3 fails, give up and stay in error state
 
   function connect() {
     if (stopped) return;
+    
+    // If we've failed too many times, just stay in error/waiting state
+    if (failCount >= MAX_FAILS) {
+      store.dispatch(setConn('waiting'));
+      return;
+    }
+    
     store.dispatch(setConn('connecting'));
 
     ws = new WebSocket(WS_URL);
 
     ws.onopen = () => {
       delay = RECONNECT_DELAY_MS; // reset backoff on success
+      failCount = 0; // reset fail counter
       // First thing: authenticate
       ws!.send(JSON.stringify({ type: 'auth', token }));
     };
@@ -43,6 +53,13 @@ export function connectFeed(token: string): () => void {
 
     ws.onclose = () => {
       if (stopped) return;
+      failCount++;
+      
+      if (failCount >= MAX_FAILS) {
+        store.dispatch(setConn('waiting')); // Give up, show as waiting/offline
+        return;
+      }
+      
       store.dispatch(setConn('connecting'));
       // Exponential backoff, capped at 30s
       retryTimer = setTimeout(() => {
@@ -52,6 +69,7 @@ export function connectFeed(token: string): () => void {
     };
 
     ws.onerror = () => {
+      failCount++;
       store.dispatch(setConn('error'));
       ws?.close(); // triggers onclose -> retry
     };

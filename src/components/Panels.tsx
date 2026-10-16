@@ -391,29 +391,29 @@ function BomRow({ line, idx, updateQty, removeItem }: {
       }`}
     >
       {/* SKU */}
-      <td className="px-4 py-3">
-        <span className="font-mono text-[11px] font-bold text-accent/90">{line.sku}</span>
+      <td className="px-4 py-3 w-[105px]">
+        <span className="font-mono text-[10px] font-bold text-accent/90 truncate block">{line.sku}</span>
       </td>
 
       {/* Description */}
       <td className="px-4 py-3">
-        <span className="text-[#e8f6fa] leading-snug">{line.desc}</span>
+        <span className="text-[#e8f6fa] leading-snug text-[11px]">{line.desc}</span>
       </td>
 
       {/* Quantity with +/- controls */}
-      <td className="px-3 py-3">
+      <td className="px-3 py-3 w-[140px]">
         <div className="flex items-center justify-center gap-2">
           <button
             onClick={() => updateQty(line.sku, -1)}
-            className="w-7 h-7 flex items-center justify-center rounded-md border border-line/60 hover:border-accent hover:bg-accent/15 text-muted hover:text-accent transition-all hover:scale-110 active:scale-95 font-bold"
+            className="w-6 h-6 flex items-center justify-center rounded border border-line/60 hover:border-accent hover:bg-accent/15 text-muted hover:text-accent transition-all hover:scale-110 active:scale-95 font-bold text-sm"
             aria-label="Decrease quantity"
           >
             −
           </button>
-          <span className="w-10 text-center font-bold tabular-nums text-[13px]">{line.qty}</span>
+          <span className="w-10 text-center font-bold tabular-nums text-[12px]">{line.qty}</span>
           <button
             onClick={() => updateQty(line.sku, 1)}
-            className="w-7 h-7 flex items-center justify-center rounded-md border border-line/60 hover:border-accent hover:bg-accent/15 text-muted hover:text-accent transition-all hover:scale-110 active:scale-95 font-bold"
+            className="w-6 h-6 flex items-center justify-center rounded border border-line/60 hover:border-accent hover:bg-accent/15 text-muted hover:text-accent transition-all hover:scale-110 active:scale-95 font-bold text-sm"
             aria-label="Increase quantity"
           >
             +
@@ -422,15 +422,15 @@ function BomRow({ line, idx, updateQty, removeItem }: {
       </td>
 
       {/* Line total */}
-      <td className="px-4 py-3 text-right">
-        <span className="font-bold tabular-nums text-accent text-[13px]">{money(line.qty * line.unit)}</span>
+      <td className="px-4 py-3 text-right w-[95px]">
+        <span className="font-bold tabular-nums text-accent text-[12px]">{money(line.qty * line.unit)}</span>
       </td>
 
       {/* Remove button */}
-      <td className="px-3 py-3">
+      <td className="px-2 py-3 w-[50px]">
         <button
           onClick={() => removeItem(line.sku)}
-          className="opacity-0 group-hover:opacity-100 w-7 h-7 flex items-center justify-center rounded-md hover:bg-bad/15 hover:text-bad transition-all hover:scale-110 active:scale-95 text-lg font-bold leading-none"
+          className="opacity-0 group-hover:opacity-100 w-6 h-6 flex items-center justify-center rounded hover:bg-bad/15 hover:text-bad transition-all hover:scale-110 active:scale-95 text-base font-bold leading-none"
           aria-label="Remove item"
           title="Remove"
         >
@@ -624,31 +624,34 @@ export function BomPanel() {
       </div>
 
       {/* table */}
-      <div className="flex-1 overflow-y-auto min-h-0 border border-line/60 rounded-xl bg-gradient-to-br from-bg/30 via-bg/50 to-bg/70 shadow-inner">
+      <div className="flex-1 min-h-0 border border-line/60 rounded-xl bg-gradient-to-br from-bg/30 via-bg/50 to-bg/70 shadow-inner overflow-hidden flex flex-col">
         <table className="w-full text-xs">
-          <thead className="sticky top-0 bg-panel/98 backdrop-blur-md border-b-2 border-line/80 z-10 shadow-sm">
+          <thead className="bg-panel/98 backdrop-blur-md border-b-2 border-line/80 shadow-sm">
             <tr className="text-[10px] uppercase tracking-widest text-muted/90">
-              <th className="text-left px-4 py-3 font-semibold">Part number</th>
+              <th className="text-left px-4 py-3 font-semibold w-[105px]">Part number</th>
               <th className="text-left px-4 py-3 font-semibold">Description</th>
-              <th className="text-center px-3 py-3 font-semibold w-[120px]">Qty</th>
-              <th className="text-right px-4 py-3 font-semibold w-[100px]">Total</th>
+              <th className="text-center px-3 py-3 font-semibold w-[140px]">Qty</th>
+              <th className="text-right px-4 py-3 font-semibold w-[95px]">Total</th>
               <th className="w-[50px]"></th>
             </tr>
           </thead>
+        </table>
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
+          <table className="w-full text-xs">
           <tbody>
             {/* Motor section */}
             {enabledSections.has('motor') && motorBom.length > 0 && (
               <>
-                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 sticky top-[49px] z-[5] border-y border-accent/20">
-                  <td colSpan={5} className="px-4 py-2.5">
+                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 border-y border-accent/20">
+                  <td colSpan={5} className="px-4 py-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-1 h-4 bg-accent rounded-full"></span>
+                      <span className="text-[10px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-1 h-3 bg-accent rounded-full"></span>
                         M-301 Motor
                       </span>
                       <button
                         onClick={() => toggleSection('motor')}
-                        className="text-[10px] text-bad/70 hover:text-bad px-2.5 py-1 rounded-md hover:bg-bad/10 transition-all font-medium"
+                        className="text-[9px] text-bad/70 hover:text-bad px-2 py-0.5 rounded hover:bg-bad/10 transition-all font-medium"
                       >
                         Remove
                       </button>
@@ -664,16 +667,16 @@ export function BomPanel() {
             {/* Tank section */}
             {enabledSections.has('tank') && tankBom.length > 0 && (
               <>
-                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 sticky top-[49px] z-[5] border-y border-accent/20">
-                  <td colSpan={5} className="px-4 py-2.5">
+                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 border-y border-accent/20">
+                  <td colSpan={5} className="px-4 py-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-1 h-4 bg-accent rounded-full"></span>
+                      <span className="text-[10px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-1 h-3 bg-accent rounded-full"></span>
                         T-101 Tank
                       </span>
                       <button
                         onClick={() => toggleSection('tank')}
-                        className="text-[10px] text-bad/70 hover:text-bad px-2.5 py-1 rounded-md hover:bg-bad/10 transition-all font-medium"
+                        className="text-[9px] text-bad/70 hover:text-bad px-2 py-0.5 rounded hover:bg-bad/10 transition-all font-medium"
                       >
                         Remove
                       </button>
@@ -689,16 +692,16 @@ export function BomPanel() {
             {/* Pump section */}
             {enabledSections.has('pump') && pumpBom.length > 0 && (
               <>
-                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 sticky top-[49px] z-[5] border-y border-accent/20">
-                  <td colSpan={5} className="px-4 py-2.5">
+                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 border-y border-accent/20">
+                  <td colSpan={5} className="px-4 py-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-1 h-4 bg-accent rounded-full"></span>
+                      <span className="text-[10px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-1 h-3 bg-accent rounded-full"></span>
                         P-201 Pump
                       </span>
                       <button
                         onClick={() => toggleSection('pump')}
-                        className="text-[10px] text-bad/70 hover:text-bad px-2.5 py-1 rounded-md hover:bg-bad/10 transition-all font-medium"
+                        className="text-[9px] text-bad/70 hover:text-bad px-2 py-0.5 rounded hover:bg-bad/10 transition-all font-medium"
                       >
                         Remove
                       </button>
@@ -714,16 +717,16 @@ export function BomPanel() {
             {/* HX section */}
             {enabledSections.has('hx') && hxBom.length > 0 && (
               <>
-                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 sticky top-[49px] z-[5] border-y border-accent/20">
-                  <td colSpan={5} className="px-4 py-2.5">
+                <tr className="bg-gradient-to-r from-accent/8 to-accent/5 border-y border-accent/20">
+                  <td colSpan={5} className="px-4 py-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
-                        <span className="w-1 h-4 bg-accent rounded-full"></span>
+                      <span className="text-[10px] font-bold text-accent uppercase tracking-wider flex items-center gap-2">
+                        <span className="w-1 h-3 bg-accent rounded-full"></span>
                         H-401 Heat Exchanger
                       </span>
                       <button
                         onClick={() => toggleSection('hx')}
-                        className="text-[10px] text-bad/70 hover:text-bad px-2.5 py-1 rounded-md hover:bg-bad/10 transition-all font-medium"
+                        className="text-[9px] text-bad/70 hover:text-bad px-2 py-0.5 rounded hover:bg-bad/10 transition-all font-medium"
                       >
                         Remove
                       </button>
@@ -739,10 +742,10 @@ export function BomPanel() {
             {/* Cable section */}
             {cableBom.length > 0 && (
               <>
-                <tr className="bg-gradient-to-r from-warn/10 to-warn/5 sticky top-[49px] z-[5] border-y border-warn/30">
-                  <td colSpan={5} className="px-4 py-2.5">
-                    <span className="text-[11px] font-bold text-warn uppercase tracking-wider flex items-center gap-2">
-                      <span className="w-1 h-4 bg-warn rounded-full"></span>
+                <tr className="bg-gradient-to-r from-warn/10 to-warn/5 border-y border-warn/30">
+                  <td colSpan={5} className="px-4 py-2">
+                    <span className="text-[10px] font-bold text-warn uppercase tracking-wider flex items-center gap-2">
+                      <span className="w-1 h-3 bg-warn rounded-full"></span>
                       ⚡ Cables & Interconnects
                     </span>
                   </td>
@@ -754,6 +757,7 @@ export function BomPanel() {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* footer: total + actions */}

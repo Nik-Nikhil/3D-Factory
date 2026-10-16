@@ -173,7 +173,7 @@ export default function App() {
         </div>
 
         {/* ── Sidebar ──────────────────────────────────────────────── */}
-        <aside className="w-[440px] flex flex-col bg-panel border-l border-line shrink-0">
+        <aside className="w-[520px] flex flex-col bg-panel border-l border-line shrink-0">
 
           {/* Live readings */}
           <div className="px-4 pt-4 pb-3 border-b border-line">
